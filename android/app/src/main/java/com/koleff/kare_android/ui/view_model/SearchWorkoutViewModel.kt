@@ -5,15 +5,19 @@ import androidx.lifecycle.viewModelScope
 import com.koleff.kare_android.common.di.IoDispatcher
 import com.koleff.kare_android.data.model.dto.WorkoutDetailsDto
 import com.koleff.kare_android.data.model.dto.WorkoutDto
-import com.koleff.kare_android.data.model.event.OnSearchEvent
-import com.koleff.kare_android.data.model.state.SearchState
-import com.koleff.kare_android.data.model.state.WorkoutDetailsState
-import com.koleff.kare_android.data.model.state.WorkoutState
+import com.koleff.kare_android.ui.event.OnSearchWorkoutEvent
+import com.koleff.kare_android.ui.state.SearchState
+import com.koleff.kare_android.ui.state.WorkoutDetailsState
+import com.koleff.kare_android.ui.state.WorkoutState
 import com.koleff.kare_android.domain.usecases.WorkoutUseCases
+import com.koleff.kare_android.ui.state.UpdateWorkoutState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -48,37 +52,42 @@ class SearchWorkoutViewModel @Inject constructor(
 
     private var originalWorkoutList: List<WorkoutDto> = mutableListOf()
 
-    fun onSearchEvent(event: OnSearchEvent) {
-        when (event) {
-            is OnSearchEvent.OnToggleSearch -> {
-                val isSearching = _searchState.value.isSearching
-                _searchState.value = searchState.value.copy(
-                    isSearching = !isSearching
-                )
+    fun onTextChange(searchText: String) {
+        _searchState.value = searchState.value.copy(
+            searchText = searchText
+        )
 
-                if (!isSearching) {
-                    onSearchEvent(OnSearchEvent.OnSearchTextChange(""))
-                }
-            }
+        val event = OnSearchWorkoutEvent.OnSearchTextChange(
+            searchText = _searchState.value.searchText,
+            workouts = originalWorkoutList
+        )
 
-            is OnSearchEvent.OnSearchTextChange -> {
-                _searchState.value = searchState.value.copy(
-                    searchText = event.searchText
-                )
+        onSearchEvent(event)
+    }
 
-                //Search filter
-                _workoutsState.value = workoutsState.value.copy(
-                    workoutList = originalWorkoutList.filter {
+    fun onToggleSearch() {
+        val isSearching = searchState.value.isSearching
+        _searchState.value = searchState.value.copy(
+            isSearching = !isSearching
+        )
 
-                        //Custom search filter...
-                        it.name.contains(event.searchText, ignoreCase = true)
-                    }
-                )
+        val event = OnSearchWorkoutEvent.OnToggleSearch(
+            isSearching = searchState.value.isSearching,
+            workouts = originalWorkoutList
+        )
+
+        onSearchEvent(event)
+    }
+
+    private fun onSearchEvent(event: OnSearchWorkoutEvent) {
+        viewModelScope.launch(dispatcher) {
+            workoutUseCases.onSearchWorkoutUseCase(event).collect { workoutState ->
+                _workoutsState.value = workoutState
             }
         }
     }
 
-    init{
+    init {
         getWorkouts()
     }
 
@@ -86,11 +95,15 @@ class SearchWorkoutViewModel @Inject constructor(
         viewModelScope.launch(dispatcher) {
             workoutUseCases.getWorkoutsUseCase().collect { workoutState ->
                 _workoutsState.value = workoutState
+
+                if (workoutState.isSuccessful) {
+                    originalWorkoutList = workoutState.workoutList ?: emptyList()
+                }
             }
         }
     }
 
-    private fun getWorkoutDetails(workoutId: Int) {
+    fun getWorkoutDetails(workoutId: Int) {
         viewModelScope.launch(dispatcher) {
             workoutUseCases.getWorkoutDetailsUseCase(workoutId).collect { workoutDetailsState ->
                 _selectedWorkoutState.value = workoutDetailsState
@@ -106,19 +119,7 @@ class SearchWorkoutViewModel @Inject constructor(
         }
     }
 
-//    @AssistedFactory
-//    interface Factory {
-//        fun create(workoutId: Int): SearchWorkoutViewModel
-//    }
-//
-//    companion object {
-//        fun provideSearchWorkoutViewModelFactory(
-//            factory: Factory,
-//            workoutId: Int
-//        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-//            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//                return factory.create(workoutId) as T
-//            }
-//        }
-//    }
+    fun resetUpdateWorkoutState() {
+        _updateWorkoutState.value = WorkoutDetailsState()
+    }
 }
