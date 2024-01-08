@@ -35,5 +35,7 @@ sealed class MainScreen(val route: String) {
         MainScreen("search_exercise/{workout_id}") { //Select exercise for current workout
         fun createRoute(workoutId: Int) = "search_exercise/$workoutId"
     }
-
+    object Register : MainScreen("register")
+    object Home : MainScreen("home")
+    object Login : MainScreen("login")
 }
