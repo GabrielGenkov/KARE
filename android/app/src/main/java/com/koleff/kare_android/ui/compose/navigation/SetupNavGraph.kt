@@ -19,7 +19,10 @@ import com.koleff.kare_android.data.model.dto.MuscleGroup
 import com.koleff.kare_android.ui.compose.screen.DashboardScreen
 import com.koleff.kare_android.ui.compose.screen.ExerciseDetailsConfiguratorScreen
 import com.koleff.kare_android.ui.compose.screen.ExerciseDetailsScreen
+import com.koleff.kare_android.ui.compose.screen.HomeScreen
+import com.koleff.kare_android.ui.compose.screen.LoginScreen
 import com.koleff.kare_android.ui.compose.screen.MuscleGroupScreen
+import com.koleff.kare_android.ui.compose.screen.RegisterScreen
 import com.koleff.kare_android.ui.compose.screen.SearchExercisesScreen
 import com.koleff.kare_android.ui.compose.screen.SearchWorkoutsScreen
 import com.koleff.kare_android.ui.compose.screen.SettingsScreen
@@ -202,5 +205,23 @@ fun SetupNavGraph(
                 searchExercisesViewModel = searchExercisesViewModel
             )
         }
+        composable(MainScreen.Register.route) {
+            RegisterScreen(
+                navController = navController
+            )
+        }
+
+        composable(MainScreen.Home.route) {
+            HomeScreen(
+                navController = navController
+            )
+        }
+
+        composable(MainScreen.Login.route) {
+            LoginScreen(
+                navController = navController
+            )
+        }
     }
 }
+
