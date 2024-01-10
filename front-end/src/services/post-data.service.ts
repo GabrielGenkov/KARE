@@ -9,23 +9,14 @@ import {Workout} from "../app/models/exercise.model";
   providedIn: 'root',
 })
 export class PostDataService {
-  private apiUrl = '../../assets/mock-posts.json'; // for fetching data
   private loginUrl = '/api/user/login'; //get
   private registerUrl= '/api/user/register'; //post
-  private workoutSelectUrl= '/api/workout/select'; // post
-  private workoutSelectedUrl= '/api/workout/selected'; // get
-  private workoutGetUrl= '/api/workout/get'; // post
   private workoutAllUrl= '/api/workout/all'; // get
-  private wokroutUpdateUrl= '/api/workout/update'; // put
   private workoutDelete = '/api/workout/delete'; //delete
   private workoutAdd_fullUrl= '/api/workout/add_full'; // post //adds full workout
 
 
   constructor(private http: HttpClient,  private cookieService: CookieService) {}
-
-  getPosts(): Observable<any> {
-    return this.http.get(this.apiUrl);
-  }
 
   saveUser(user: PostUser): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
@@ -91,7 +82,6 @@ export class PostDataService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json; charset=utf-8',
       'Authorization': `Bearer ${token}`
-
     });
     return this.http.get(this.workoutAllUrl, { headers });
   }

@@ -21,8 +21,8 @@ import {OutAuthGuard} from "../services/out-auth-guard";
 const routes: Routes = [
   {path:'', component:StartupComponent, canActivate: [AuthGuard]},
   {path:'startup', component: StartupComponent, canActivate: [AuthGuard]},
-  { path: 'login', component: LoginComponent, canActivate: [AuthGuard] },
-  { path: 'register', component: RegisterComponent, canActivate: [AuthGuard] },
+  { path:'login', component: LoginComponent, canActivate: [AuthGuard] },
+  { path:'register', component: RegisterComponent, canActivate: [AuthGuard] },
   {path:'home', component: HomeComponent, canActivate:[OutAuthGuard]},
   {path:'main', component: MainComponent, canActivate:[OutAuthGuard]},
   {path:'create-workout', component: CreateworkoutComponent, canActivate: [OutAuthGuard]},

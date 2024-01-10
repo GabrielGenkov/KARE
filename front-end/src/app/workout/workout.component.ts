@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { PostDataService } from '../../services/post-data.service';
-import { Workout } from '../models/exercise.model';
 
 @Component({
   selector: 'app-workout',

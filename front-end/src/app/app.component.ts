@@ -18,9 +18,16 @@ export class AppComponent {
       this.updateNavbarVisibility();
     });
   }
-  isRestrictedRoute(): boolean{
-    const restrictedRoutes = ['/startup' , '/register', '/login']
-    return restrictedRoutes.includes(this.router.url)
+  isRestrictedRoute(): boolean {
+    const allowedRoutes = ['/main', '/create-workout', '/workout-list'];
+
+    if (allowedRoutes.includes(this.router.url)) {
+      // This is an allowed route, so the method can be shown
+      return false;
+    } else {
+      // This is a restricted route, so the method should be hidden
+      return true;
+    }
   }
   private updateNavbarVisibility(): void{
   }
