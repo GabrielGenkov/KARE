@@ -10,7 +10,6 @@ import { Router } from '@angular/router';
   encapsulation: ViewEncapsulation.None,
 })
 export class RegisterComponent {
-  tempEmail: string = 'admin';
   cpassword: string = '';
   user: PostUser = {username:'',password:'',email:''}
 
@@ -18,12 +17,7 @@ export class RegisterComponent {
   constructor(
     private post: PostDataService,
     private router: Router,
-  ) {
-    this.post.getPosts().subscribe((data) => {
-      this.allPosts = data;
-    });
-
-  }
+  ){}
   saveUser() {
     this.post.saveUser(this.user).subscribe(
       (response: any) => {
