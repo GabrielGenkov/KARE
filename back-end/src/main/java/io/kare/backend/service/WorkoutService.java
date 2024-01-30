@@ -29,4 +29,8 @@ public interface WorkoutService {
     EmptyResponse updateWorkout(UpdateWorkoutRequest request, UserEntity user);
 
 	Void deleteWorkout(DeleteWorkoutRequest request, UserEntity user);
+
+    Void completeWorkout(CompleteWorkoutRequest request, UserEntity user);
+    GetCompletedWorkoutsResponse getCompletedWorkouts(UserEntity user);
+
 }
