@@ -24,4 +24,15 @@ export class WorkoutComponent {
       }
     );
   }
+  completeWorkout() {
+    const workoutId = this.workout.id;
+    this.postDataService.completeWorkout(workoutId).subscribe(
+      (response) => {
+        console.log('UDRII:',response);
+      },
+      (error) => {
+        console.error('Error deleting workout:', error);
+      }
+    );
+  }
 }
