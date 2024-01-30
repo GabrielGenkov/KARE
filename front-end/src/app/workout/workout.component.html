@@ -2,9 +2,15 @@
   <div class="workout-name">{{ workout.name }}</div>
   <div *ngFor="let exercise of workout.exercises">
     <p>Exercise: {{ exercise.exercise.name }}</p>
-    <p>Sets: {{exercise.sets || 'N/A'}} Reps: {{ exercise.reps || 'N/A' }}, Weight: {{ exercise.weight || 'N/A' }}kg</p>
+    <p>
+      Sets: {{ exercise.sets || "N/A" }} Reps: {{ exercise.reps || "N/A" }},
+      Weight: {{ exercise.weight || "N/A" }}kg
+    </p>
   </div>
   <button class="button" (click)="deleteWorkout()">
     <p class="buttonText">Delete Workout</p>
+  </button>
+  <button class="button" (click)="completeWorkout()">
+    <p class="buttonText">Complete Workout</p>
   </button>
 </div>

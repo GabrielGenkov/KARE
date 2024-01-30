@@ -4,9 +4,7 @@ import io.kare.backend.annotation.User;
 import io.kare.backend.entity.UserEntity;
 import io.kare.backend.payload.data.WorkoutFullExercisePayload;
 import io.kare.backend.payload.request.*;
-import io.kare.backend.payload.response.AddWorkoutResponse;
-import io.kare.backend.payload.response.GetWorkoutResponse;
-import io.kare.backend.payload.response.GetWorkoutsResponse;
+import io.kare.backend.payload.response.*;
 import io.kare.backend.service.WorkoutService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,6 +58,14 @@ public class WorkoutController {
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteWorkout(@RequestBody DeleteWorkoutRequest request, @User UserEntity user) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(this.workoutService.deleteWorkout(request, user));
+    }
+    @PostMapping("/complete")
+    public ResponseEntity<Void> getWorkout(@RequestBody CompleteWorkoutRequest request, @User UserEntity user) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.workoutService.completeWorkout(request, user));
+    }
+    @GetMapping("/all_completed")
+    public ResponseEntity<GetCompletedWorkoutsResponse> getCompletedWorkouts(@User UserEntity user) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.workoutService.getCompletedWorkouts(user));
     }
 
     private AddFullWorkoutRequest mapToAddFullWorkoutRequest(AddFullWorkoutFormattedRequest request) {

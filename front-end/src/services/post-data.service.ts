@@ -14,6 +14,8 @@ export class PostDataService {
   private workoutAllUrl= '/api/workout/all'; // get
   private workoutDelete = '/api/workout/delete'; //delete
   private workoutAdd_fullUrl= '/api/workout/add_full'; // post //adds full workout
+  private workoutComplete= '/api/workout/complete'; // post //completes a workout
+  private workoutAllCompleted= '/api/workout/all_completed'; // get //Gets all Completed workouts
 
 
   constructor(private http: HttpClient,  private cookieService: CookieService) {}
@@ -97,4 +99,27 @@ export class PostDataService {
 
     return this.http.delete(url, options);
   }
+
+  completeWorkout(workoutId: string): Observable<any> {
+    const token = this.cookieService.get('token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json; charset=utf-8',
+      'Authorization': `Bearer ${token}`
+    });
+
+    const url = this.workoutComplete;
+    const options = { headers, body: { id : workoutId } };
+
+    return this.http.post(url, options);
+  }
+
+  getCompletedWorkouts(): Observable<any> {
+    const token = this.cookieService.get('token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json; charset=utf-8',
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get(this.workoutAllCompleted, { headers });
+  }
+
 }

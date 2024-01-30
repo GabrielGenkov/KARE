@@ -6,9 +6,12 @@ import io.kare.backend.mapper.*;
 import io.kare.backend.payload.data.*;
 import io.kare.backend.payload.request.*;
 import io.kare.backend.payload.response.*;
+import io.kare.backend.repository.CompletedWorkoutsRepository;
 import io.kare.backend.repository.WorkoutRepository;
 import io.kare.backend.service.*;
 import jakarta.transaction.Transactional;
+
+import java.time.LocalDateTime;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,23 +24,26 @@ public class WorkoutServiceImpl implements WorkoutService {
 	private final ExerciseMapper exerciseMapper;
 	private final ExerciseOptionService exerciseOptionService;
 	private final SelectedWorkoutService selectedWorkoutService;
+	private final CompletedWorkoutsRepository completedWorkoutsRepository;
 	private ProgramService programService;
 	private final WorkoutMapper workoutMapper;
 
 	public WorkoutServiceImpl(
-		WorkoutRepository workoutRepository,
-		ExerciseService exerciseService,
-		ExerciseMapper exerciseMapper,
-		ExerciseOptionService exerciseOptionService,
-		SelectedWorkoutService selectedWorkoutService,
-		WorkoutMapper workoutMapper
+            WorkoutRepository workoutRepository,
+            ExerciseService exerciseService,
+            ExerciseMapper exerciseMapper,
+            ExerciseOptionService exerciseOptionService,
+            SelectedWorkoutService selectedWorkoutService,
+			CompletedWorkoutsRepository completedWorkoutsRepository,
+            WorkoutMapper workoutMapper
 	) {
 		this.workoutRepository = workoutRepository;
 		this.exerciseService = exerciseService;
 		this.exerciseMapper = exerciseMapper;
 		this.exerciseOptionService = exerciseOptionService;
 		this.selectedWorkoutService = selectedWorkoutService;
-		this.workoutMapper = workoutMapper;
+        this.completedWorkoutsRepository = completedWorkoutsRepository;
+        this.workoutMapper = workoutMapper;
 	}
 
 	@Autowired
@@ -179,6 +185,32 @@ public class WorkoutServiceImpl implements WorkoutService {
 		this.selectedWorkoutService.delete(workoutEntity);
 		this.programService.removeWorkout(workoutEntity);
 		this.workoutRepository.delete(workoutEntity);
+		return null;
+	}
+
+	@Override
+	public Void completeWorkout(CompleteWorkoutRequest request, UserEntity user) {
+		WorkoutEntity workoutEntity = this.workoutRepository.findById(request.id())
+				.orElseThrow(() -> new WorkoutNotFoundException(request.id()));
+
+		CompletedWorkoutEntity completedWorkoutEntity = new CompletedWorkoutEntity();
+		completedWorkoutEntity.setUser(user);
+		completedWorkoutEntity.setWorkout(workoutEntity);
+		completedWorkoutEntity.setCompletionDate(LocalDateTime.now());
+		completedWorkoutsRepository.save(completedWorkoutEntity);
+		return null;
+	}
+
+	@Override
+	public GetCompletedWorkoutsResponse getCompletedWorkouts(UserEntity user) {
+		Optional<List<CompletedWorkoutEntity>> optional = this.completedWorkoutsRepository.findAllByUser(user);
+		if(optional.isPresent()){
+			List<GetCompletedWorkoutResponse> response = new ArrayList<>();
+			for (CompletedWorkoutEntity entity : optional.get()){
+				response.add(new GetCompletedWorkoutResponse(entity.getId(),entity.getWorkoutName(),entity.getCompletionDate()));
+			}
+			return new GetCompletedWorkoutsResponse(response);
+		}
 		return null;
 	}
 }
