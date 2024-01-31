@@ -1,7 +1,12 @@
 <nav class="nav-container" *ngIf="!isRestrictedRoute()">
   <img routerLink="/main" alt="amogus" class="nav-logo" src="../../assets/Images/logo.png">
-  <button class="button" (click)="logout()">
-    <p class="buttonText">Log out</p>
-  </button>
+  <div>
+    <button class="button" (click)="logout()">
+      <p class="buttonText">Log out</p>
+    </button>
+    <button class="button" routerLink="/history">
+      <p class="buttonText">History</p>
+    </button>
+  </div>
 </nav>
 <router-outlet></router-outlet>
