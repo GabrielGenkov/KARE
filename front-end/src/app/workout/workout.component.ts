@@ -28,10 +28,10 @@ export class WorkoutComponent {
     const workoutId = this.workout.id;
     this.postDataService.completeWorkout(workoutId).subscribe(
       (response) => {
-        console.log('UDRII:',response);
+        alert("Good job for completing the workout!")
       },
       (error) => {
-        console.error('Error deleting workout:', error);
+        alert('Error Completing workout:' + error);
       }
     );
   }
