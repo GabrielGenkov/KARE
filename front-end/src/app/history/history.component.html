@@ -1,0 +1,20 @@
+<div class="background">
+  <div class="container">
+    <div class="logForm">
+      <div class="startupBox">
+        <p> Workout History </p>
+      </div>
+      <!--Bla-->
+      <div class="frame">
+        <div *ngFor="let workout of completedWorkouts">
+          <div>
+            <div>{{ workout.id }}</div>
+            <div>{{ workout.workoutName }}</div>
+            <div>{{ formatDate(workout.completionDate) }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
