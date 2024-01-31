@@ -19,7 +19,7 @@ export class AppComponent {
     });
   }
   isRestrictedRoute(): boolean {
-    const allowedRoutes = ['/main', '/create-workout', '/workout-list'];
+    const allowedRoutes = ['/main', '/create-workout', '/workout-list', '/history'];
 
     if (allowedRoutes.includes(this.router.url)) {
       // This is an allowed route, so the method can be shown
