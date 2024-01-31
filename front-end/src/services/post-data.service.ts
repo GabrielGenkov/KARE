@@ -101,16 +101,11 @@ export class PostDataService {
   }
 
   completeWorkout(workoutId: string): Observable<any> {
-    const token = this.cookieService.get('token');
     const headers = new HttpHeaders({
       'Content-Type': 'application/json; charset=utf-8',
-      'Authorization': `Bearer ${token}`
+      'Authorization': `Bearer ${this.cookieService.get('token')}`
     });
-
-    const url = this.workoutComplete;
-    const options = { headers, body: { id : workoutId } };
-
-    return this.http.post(url, options);
+    return this.http.post(this.workoutComplete,{ id : workoutId } ,{headers});
   }
 
   getCompletedWorkouts(): Observable<any> {
