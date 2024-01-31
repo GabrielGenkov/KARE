@@ -15,6 +15,7 @@ import { CardioComponent } from './exercise-components/cardio/cardio.component';
 import { AbsComponent } from './exercise-components/abs/abs.component';
 import { ShouldersComponent } from './exercise-components/shoulders/shoulders.component';
 import { WorkoutListComponent } from './workout-list/workout-list.component';
+import { HistoryComponent} from "./history/history.component";
 import {AuthGuard} from "../services/auth-guard";
 import {OutAuthGuard} from "../services/out-auth-guard";
 
@@ -27,6 +28,7 @@ const routes: Routes = [
   {path:'main', component: MainComponent, canActivate:[OutAuthGuard]},
   {path:'create-workout', component: CreateworkoutComponent, canActivate: [OutAuthGuard]},
   {path:'workout-list', component: WorkoutListComponent, canActivate: [OutAuthGuard]},
+  {path:'history', component: HistoryComponent, canActivate: [OutAuthGuard]},
 
   {path:'biceps', component: BicepsComponent, canActivate: [OutAuthGuard]},
   {path:'triceps', component: TricepsComponent, canActivate: [OutAuthGuard]},
