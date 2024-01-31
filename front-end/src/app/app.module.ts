@@ -13,6 +13,7 @@ import { HomeModule } from './home/home.module';
 import { CreateworkoutModule } from './createworkout/createworkout.module';
 import { WorkoutListModule } from './workout-list/workout-list.module';
 import { CookieModule } from 'ngx-cookie';
+import { HistoryModule} from "./history/history.module";
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { CookieModule } from 'ngx-cookie';
     CreateworkoutModule,
     WorkoutListModule,
     CookieModule.forRoot(),
+    HistoryModule,
   ],
   providers: [
     PostDataService
